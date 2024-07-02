@@ -24,7 +24,7 @@ public class TicketEntity {
     @Column(name = "entry_time")
     LocalDateTime entryTime;
 
-    @Column(name = "exit_time")
+    @Column(name = "paid_time")
     LocalDateTime payTime;
 
     @Column(name = "paid")
