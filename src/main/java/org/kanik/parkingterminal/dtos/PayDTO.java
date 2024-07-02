@@ -5,16 +5,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Builder
 @Getter
 @Setter
 @Data
-public class TicketDTO {
-    Integer id;
-
-    LocalDateTime entryTime;
-
-    LocalDateTime payTime;
+public class PayDTO {
+    int cost;
+    int ticket;
+    String card;
 }

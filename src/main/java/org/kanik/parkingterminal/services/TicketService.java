@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 @Data
@@ -19,6 +20,8 @@ import java.util.List;
 public class TicketService {
     private final TicketRepository repository;
     private final CostCalculator costCalculator;
+
+    private final LocalDateTime NULL = LocalDateTime.of(1971, Month.JANUARY,1,0,0,0);
 
     public TicketEntity findTicketById(int id) {
         return repository.findById(id).orElseThrow(TicketNotFoundException::new);
@@ -38,6 +41,14 @@ public class TicketService {
         return repository.save(newTicket);
     }
     @Transactional
+    public TicketEntity createFineTicketAndGet(){
+        TicketEntity ticket = TicketEntity.builder()
+                .entryTime(NULL)
+                .paid(false)
+                .build();
+        return repository.save(ticket);
+    }
+    @Transactional
     public int calculateCost(int id) {
         TicketEntity ticket = findTicketById(id);
         if (ticket.isPaid()) {
@@ -50,6 +61,12 @@ public class TicketService {
     @Transactional
     public boolean payTicket(int id) {
         TicketEntity ticket = findTicketById(id);
+        if(ticket.getEntryTime().isEqual(NULL)){
+            ticket.setEntryTime(LocalDateTime.now());
+            ticket.setPayTime(LocalDateTime.now());
+            ticket.setPaid(true);
+            return true;
+        }
         if (!ticket.isPaid()) {
             //Paying process
             ticket.setPaid(true);

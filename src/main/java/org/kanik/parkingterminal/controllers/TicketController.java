@@ -1,6 +1,7 @@
 package org.kanik.parkingterminal.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.kanik.parkingterminal.dtos.PayDTO;
 import org.kanik.parkingterminal.dtos.TicketDTO;
 import org.kanik.parkingterminal.services.TicketService;
 import org.kanik.parkingterminal.util.CostCalculator;
@@ -23,6 +24,12 @@ public class TicketController {
     public TicketDTO enter(){
         return TicketMapper.convertToDTO(ticketService.createNewTicketAndGet());
     }
+    @PostMapping("/fine-ticket")
+    @ResponseStatus(HttpStatus.OK)
+    public TicketDTO fineTicket(){
+        return TicketMapper.convertToDTO(ticketService.createFineTicketAndGet());
+    }
+
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public List<TicketDTO> getAll(){
@@ -43,16 +50,21 @@ public class TicketController {
     public int fine(){
         return costCalculator.getFine();
     }
-    @PostMapping("/pay-fine")
+    @GetMapping("/free-time")
     @ResponseStatus(HttpStatus.OK)
-    public boolean payFine(){
-        //Todo: pay fine
-        return true;
+    public int freeTime(){
+        return costCalculator.getFreeTime();
     }
-    @PostMapping("/pay/{id}")
+    @GetMapping("/exit-time")
     @ResponseStatus(HttpStatus.OK)
-    public boolean pay(@PathVariable int id){
-        return ticketService.payTicket(id);
+    public int exitTime(){
+        return costCalculator.getExitTime();
+    }
+
+    @PostMapping("/pay")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean pay(@RequestBody PayDTO payDTO){
+        return ticketService.payTicket(payDTO.getTicket());
     }
     @PostMapping("/exit/{id}")
     @ResponseStatus(HttpStatus.OK)
