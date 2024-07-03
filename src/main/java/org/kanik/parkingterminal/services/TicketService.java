@@ -89,11 +89,13 @@ public class TicketService {
     }
     @Transactional
     public boolean exit(int id) {
+        if(calculateCost(id) == 0){
+            return true;
+        }
         TicketEntity ticket = findTicketById(id);
         LocalDateTime exitAllowed = ticket.getPayTime().plusMinutes(costCalculator.getExitTime());
         if (ticket.isPaid() && exitAllowed.isAfter(LocalDateTime.now())) {
             //open door
-            repository.delete(ticket);
             return true;
         }else{
             throw new TicketNotPaidException();
