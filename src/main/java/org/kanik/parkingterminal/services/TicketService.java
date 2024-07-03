@@ -89,15 +89,18 @@ public class TicketService {
     }
     @Transactional
     public boolean exit(int id) {
-        if(calculateCost(id) == 0){
+        if (calculateCost(id) == 0) {
             return true;
         }
         TicketEntity ticket = findTicketById(id);
+        if(!ticket.isPaid()){
+            return false;
+        }
         LocalDateTime exitAllowed = ticket.getPayTime().plusMinutes(costCalculator.getExitTime());
-        if (ticket.isPaid() && exitAllowed.isAfter(LocalDateTime.now())) {
+        if (exitAllowed.isAfter(LocalDateTime.now())) {
             //open door
             return true;
-        }else{
+        } else {
             throw new TicketNotPaidException();
         }
     }
