@@ -51,6 +51,9 @@ public class TicketService {
     @Transactional
     public int calculateCost(int id) {
         TicketEntity ticket = findTicketById(id);
+        if(ticket.getEntryTime().equals(NULL)){
+            return costCalculator.getFine();
+        }
         if (ticket.isPaid()) {
             ticket.setEntryTime(ticket.getPayTime());
             ticket.setPayTime(null);
