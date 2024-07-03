@@ -6,7 +6,6 @@ import org.kanik.parkingterminal.store.repositories.TicketRepository;
 import org.kanik.parkingterminal.util.CostCalculator;
 import org.kanik.parkingterminal.util.exceptions.AlreadyPaidTicketException;
 import org.kanik.parkingterminal.util.exceptions.TicketNotFoundException;
-import org.kanik.parkingterminal.util.exceptions.TicketNotPaidException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +88,13 @@ public class TicketService {
     }
     @Transactional
     public boolean exit(int id) {
+        if(canExit(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+    private boolean canExit(int id){
         if (calculateCost(id) == 0) {
             return true;
         }
@@ -100,8 +106,11 @@ public class TicketService {
         if (exitAllowed.isAfter(LocalDateTime.now())) {
             //open door
             return true;
-        } else {
-            throw new TicketNotPaidException();
+        }else{
+            ticket.setEntryTime(ticket.getPayTime());
+            ticket.setPayTime(null);
+            ticket.setPaid(false);
         }
+        return false;
     }
 }
