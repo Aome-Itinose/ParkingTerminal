@@ -29,4 +29,7 @@ public class TicketEntity {
 
     @Column(name = "paid")
     boolean paid;
+
+    @Column(name = "paid_count")
+    int paidCount;
 }

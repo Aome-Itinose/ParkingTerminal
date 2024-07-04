@@ -22,7 +22,12 @@ public class CostCalculator {
 
     public int calculate(TicketEntity ticket) {
         long timeDiff = ticket.getEntryTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
-        int time = (int) Math.max(0, timeDiff - freeTime);
+        int time;
+        if(ticket.getPaidCount() == 0) {
+            time = (int) Math.max(0, timeDiff - freeTime);
+        }else{
+            time = (int) Math.max(0, timeDiff);
+        }
         return (int) Math.ceil(time *  pricePerHour / 60);
     }
 }
