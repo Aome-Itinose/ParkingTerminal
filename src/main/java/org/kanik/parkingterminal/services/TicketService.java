@@ -62,12 +62,14 @@ public class TicketService {
             ticket.setEntryTime(LocalDateTime.now());
             ticket.setPayTime(LocalDateTime.now());
             ticket.setPaid(true);
+            ticket.setPaidCount(ticket.getPaidCount() + 1);
             return true;
         }
         if (!ticket.isPaid()) {
             //Paying process
             ticket.setPaid(true);
             ticket.setPayTime(LocalDateTime.now());
+            ticket.setPaidCount(ticket.getPaidCount() + 1);
             return true;
         }else{
             if(ticket.getPayTime().plusMinutes(costCalculator.getExitTime()).isAfter(LocalDateTime.now())){
@@ -76,6 +78,7 @@ public class TicketService {
             else{
                 ticket.setEntryTime(ticket.getPayTime());
                 ticket.setPayTime(LocalDateTime.now());
+                ticket.setPaidCount(ticket.getPaidCount() + 1);
                 //paying process
                 return true;
             }
@@ -99,7 +102,7 @@ public class TicketService {
         }
         LocalDateTime exitAllowed = ticket.getPayTime().plusMinutes(costCalculator.getExitTime());
         if (exitAllowed.isAfter(LocalDateTime.now())) {
-            //open door
+            //open doorп
             return true;
         }
         return false;
