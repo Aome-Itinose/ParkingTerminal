@@ -102,7 +102,7 @@ public class TicketService {
         }
         LocalDateTime exitAllowed = ticket.getPayTime().plusMinutes(costCalculator.getExitTime());
         if (exitAllowed.isAfter(LocalDateTime.now())) {
-            //open door
+            //open doorп
             return true;
         }
         return false;
