@@ -53,11 +53,6 @@ public class TicketService {
         if(ticket.getEntryTime().equals(NULL)){
             return costCalculator.getFine();
         }
-        if (ticket.isPaid()) {
-            ticket.setEntryTime(ticket.getPayTime());
-            ticket.setPayTime(null);
-            ticket.setPaid(false);
-        }
         return costCalculator.calculate(ticket);
     }
     @Transactional
@@ -109,10 +104,6 @@ public class TicketService {
         if (exitAllowed.isAfter(LocalDateTime.now())) {
             //open door
             return true;
-        }else{
-            ticket.setEntryTime(ticket.getPayTime());
-            ticket.setPayTime(null);
-            ticket.setPaid(false);
         }
         return false;
     }
