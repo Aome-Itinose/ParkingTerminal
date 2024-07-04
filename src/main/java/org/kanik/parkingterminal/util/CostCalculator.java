@@ -21,8 +21,14 @@ public class CostCalculator {
     private int fine;
 
     public int calculate(TicketEntity ticket) {
-        long timeDiff = ticket.getEntryTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
-        int time = (int) Math.max(0, timeDiff - freeTime);
-        return (int) Math.ceil(time *  pricePerHour / 60);
+        if (!ticket.isPaid()){
+            long timeDiff = ticket.getEntryTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
+            int time = (int) Math.max(0, timeDiff - freeTime);
+            return (int) Math.ceil(time * pricePerHour / 60);
+        }else{
+            long timeDiff = ticket.getPayTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
+            int time = (int) Math.max(0, timeDiff - freeTime);
+            return (int) Math.ceil(time * pricePerHour / 60);
+        }
     }
 }
