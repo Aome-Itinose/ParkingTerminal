@@ -59,7 +59,6 @@ public class TicketService {
     public boolean payTicket(int id) {
         TicketEntity ticket = findTicketById(id);
         if(ticket.getEntryTime().isEqual(NULL)){
-            ticket.setEntryTime(LocalDateTime.now());
             ticket.setPayTime(LocalDateTime.now());
             ticket.setPaid(true);
             return true;
@@ -74,7 +73,6 @@ public class TicketService {
                 throw new AlreadyPaidTicketException();
             }
             else{
-                ticket.setEntryTime(ticket.getPayTime());
                 ticket.setPayTime(LocalDateTime.now());
                 //paying process
                 return true;
