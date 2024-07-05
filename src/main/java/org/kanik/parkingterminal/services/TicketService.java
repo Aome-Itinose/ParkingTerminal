@@ -50,7 +50,7 @@ public class TicketService {
     @Transactional
     public int calculateCost(int id) {
         TicketEntity ticket = findTicketById(id);
-        if(ticket.getEntryTime().equals(NULL)){
+        if(ticket.getEntryTime().equals(NULL) && !ticket.isPaid()){
             return costCalculator.getFine();
         }
         return costCalculator.calculate(ticket);
